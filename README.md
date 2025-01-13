@@ -26,20 +26,28 @@ Feedback, suggestions, and contributions are welcome as I continue to improve my
    -sb    --show-bin: Show the contents of bin dir.  
    -sbf   --show-build-file: Show the contents of config/build.ibx.  
 
-   You can run --install in an existing C project to  install  IronbinX dependencies.  
+   You can run --install in an existing C project to install  IronbinX dependencies.  
           This command will create necessary files and directories for ibx to run.  
-          eg: A build config file will be created in  config/build.ibx  with key: value pairs.  
+          A build config file will be created in  config/build.ibx  with key: value pairs.  
           You can modify values the build.ibx file that will be used with --build and other cmds.  
-          eg: "compiler": "gcc"; key, values must be enclosed in double quotes (")  
+          "compiler": "gcc"; key, values must be enclosed in double quotes (")  
               and semicolon(;) is required at the end of each pair.  
-          Some cmds can be used in a single call each will wait the last to end.  
-          eg: In a newly --make <ProjectName> you can cd <ProjectName> then run `ibx --init --build --run`.    
+          Some commands can be used in a single call each will wait the last to end.  
+          In a newly --make <ProjectName> you can cd <ProjectName> then run `ibx --init --build --run`.    
           This will initialize IronbinX then build the project and run it.
-          eg: Another example is ibx --clean --build.
+          Another example is `ibx --clean --build`.
               This cmd will remove bin dir and build a new executable.
           Bin dirs removed with clean will be moved inside .ironbinx/trash with a timestamp of deletion.
 
 
+## Usage:
+  - To build a new project: `ibx --make <ProjectName>` or `ibx -m <ProjectName>`.  
+  - Then `cd <ProjectName>`.  
+
+  - ```bash
+    ibx --init
+    ibx -b
+  ```
 
 
 
