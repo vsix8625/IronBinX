@@ -11,7 +11,10 @@ int main(int argc, char **argv) {
       argv++;
       if (IBX_StrMatch(*argv, IBX_CMD_HELP_STR_1) ||
           IBX_StrMatch(*argv, IBX_CMD_HELP_STR_2)) {
-        system("clear");
+        int shell_error = system("clear");
+        if (shell_error) {
+          return IBX_FAILURE;
+        }
         printf(IBX_VERSION_PRINTF);
         printf(IBX_HELP_HEADER_STR);
         printf(IBX_HELP_BODY);
