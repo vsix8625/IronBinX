@@ -1,0 +1,1 @@
+gcc -Wall -O0 src/*.c -Iinclude -o bin/IronbinX -lACE
