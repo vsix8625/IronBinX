@@ -43,11 +43,8 @@ Feedback, suggestions, and contributions are welcome as I continue to improve my
 ## Usage:
   - To build a new project: `ibx --make <ProjectName>` or `ibx -m <ProjectName>`.  
   - Then `cd <ProjectName>`.  
+  - Finally `ibx --init`.  
 
-  - ```bash
-    ibx --init
-    ibx -b
-  ```
 
 
 
