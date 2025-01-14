@@ -1,7 +1,5 @@
-# Compiler
 CC = gcc
 
-# Compiler flags
 CFLAGS = -std=gnu17 -Wall -Werror -O2 -Iinclude
 
 # Directories
@@ -18,7 +16,6 @@ OBJECTS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SOURCES))
 # Executable name
 EXECUTABLE = $(BIN_DIR)/IronbinX
 
-# Default target
 all: $(EXECUTABLE)
 
 # Link object files to create executable
@@ -30,9 +27,10 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Clean target to remove compiled files
+run:
+	$(EXECUTABLE)
+
 clean:
 	rm -rf $(OBJ_DIR)/*.o $(EXECUTABLE)
 
-.PHONY: all clean
-
+.PHONY: all run clean
