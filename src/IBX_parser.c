@@ -46,14 +46,14 @@ int IBX_Init(void) {
   }
   if (!IBX_IsFile("src/main.c")) {
     char *default_main_c =
-        "#include <ACE/ACE.h>\n\nint main(int argc, char "
+        "#include <stdio.h>\n#include <stdlib.h>\n\nint main(int argc, char "
         "**argv){\n\tint error = "
-        "system(\"date\");\n\tif(error){\n\t\tACE_cprintf(\"31\",\"Shell "
+        "system(\"date\");\n\tif(error){\n\t\tprintf(\"Shell "
         "command 'date' error\\n\");\n\t\treturn "
-        "ACE_EXIT_FAILURE;\n\t}\n\tprintf(\"IronBinX "
+        "-1;\n\t}\n\tprintf(\"IronBinX "
         "default main "
-        "function\\n\");\n\tACE_CPRINTF_VERSION;\n\twhile(argc > "
-        "1){\n\t\targc--;\n\t\targv++;\n\t}\n\treturn ACE__SUCCESS__;\n}";
+        "function\\n\");\n\twhile(argc > "
+        "1){\n\t\targc--;\n\t\targv++;\n\t}\n\treturn 0;\n}";
     IBX_WriteToFile("src/main.c", IBX_FILE_MODE_WRITE, default_main_c);
   } else {
     IBX_printf("main.c file already exists. Continue..\n");
