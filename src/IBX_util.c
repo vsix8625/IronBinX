@@ -266,7 +266,7 @@ int IBX_printf(const char *format, ...) {
 //----------------------------------------------------------------------------------------------------
 
 int IBX_WriteToFile(const char *file_name, int mode, const char *format, ...) {
-  char *mode_chr;
+  char *mode_chr = " ";
   if (mode) {
     switch (mode) {
     case IBX_FILE_MODE_WRITE: {

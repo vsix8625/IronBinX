@@ -5,8 +5,8 @@ CC = gcc
 CFLAGS = -std=gnu17 -Wall -Werror -O2 -Iinclude
 
 # Directories
-SRC_DIR = ../src
-BIN_DIR = ../bin
+SRC_DIR = src
+BIN_DIR = bin
 OBJ_DIR = build/objects
 
 # Source files
@@ -16,7 +16,7 @@ SOURCES = $(wildcard $(SRC_DIR)/*.c)
 OBJECTS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SOURCES))
 
 # Executable name
-EXECUTABLE = $(BIN_DIR)/IrobinXMake
+EXECUTABLE = $(BIN_DIR)/IronbinX
 
 # Default target
 all: $(EXECUTABLE)

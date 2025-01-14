@@ -40,7 +40,10 @@ int IBX_Init(void) {
   }
 
   IBX_WriteBuildFile();
-  system("clear");
+  int sherr = system("clear");
+  if (sherr) {
+    return IBX_FAILURE;
+  }
   if (!IBX_IsFile("src/main.c")) {
     char *default_main_c =
         "#include <ACE/ACE.h>\n\nint main(int argc, char "
@@ -85,6 +88,9 @@ int IBX_RebuildBin(void) {
     IBX_printf("Error creating new bin directory\n");
     return IBX_FAILURE;
   }
+
+  free(bin_merge);
+  free(bin_merge_full);
   return IBX_SUCCESS;
 }
 
@@ -343,7 +349,11 @@ int IBX_CmdHandler(IBX_Uint32 sig, int argc, char **argv) {
 
     if (IBX_IsDir(IBX_DIR)) {
       IBX_printf("IronbinX already installed on the current project\n");
-      system("tree .ironbinx");
+      int shell_error = system("tree .ironbinx");
+      if (shell_error) {
+        IBX_printf("Shell error: tree\n");
+        return IBX_FAILURE;
+      }
       break;
     }
 
@@ -517,7 +527,14 @@ int IBX_CmdHandler(IBX_Uint32 sig, int argc, char **argv) {
     IBX_printf("Command: %s\n", cmd_buffer);
     IBX_WriteToFile(IBX_LOG_FILE, IBX_FILE_MODE_APPEND, "Build command: %s\n",
                     sys_cmd_final);
-    system(sys_cmd_final);
+    int shell_error = system(sys_cmd_final);
+    if (shell_error) {
+      IBX_printf("Shell error: %s\n", sys_cmd_final);
+      free(sys_cmd);
+      free(sys_cmd_final);
+      free(src_files_conc);
+      return IBX_FAILURE;
+    }
     IBX_log(IBX_HISTORY_FILE, "--build: %s\n", cmd_buffer);
 
     free(sys_cmd);
@@ -581,14 +598,25 @@ int IBX_CmdHandler(IBX_Uint32 sig, int argc, char **argv) {
         IBX_printf("IronbinX executable not found. Aborting\n");
         return IBX_FAILURE;
       } else {
-        system(build_struct.output);
+        int shell_error = system(build_struct.output);
+        if (shell_error) {
+          IBX_printf("Shell error: %s\n", build_struct.output);
+          return IBX_FAILURE;
+        }
       }
     }
 
     char *sys_cmd = IBX_StrMerge("$(cat < ", IBX_CONFIG_EXECUTABLE_NAME_FILE);
     char *sys_cmd_final = IBX_StrMerge(sys_cmd, ")");
 
-    system(sys_cmd_final);
+    // handle error
+    int sherr = system(sys_cmd_final);
+    if (sherr) {
+      IBX_printf("Shell error: %s\n", sys_cmd_final);
+      free(sys_cmd);
+      free(sys_cmd_final);
+      return IBX_FAILURE;
+    }
     IBX_log(IBX_HISTORY_FILE, "--run: %s\n", sys_cmd_final);
 
     free(sys_cmd);
@@ -608,7 +636,10 @@ int IBX_CmdHandler(IBX_Uint32 sig, int argc, char **argv) {
       IBX_printf("Error --clean\n");
     } else {
       IBX_printf("Cleaned bin directory successfully\n");
-      system("clear && tree bin && tree -a .ironbinx");
+      int sherr = system("clear && tree bin && tree -a .ironbinx");
+      if (sherr) {
+        return IBX_FAILURE;
+      }
     }
 
   } break; // end of clean cmd
@@ -625,7 +656,10 @@ int IBX_CmdHandler(IBX_Uint32 sig, int argc, char **argv) {
 
     IBX_mkdir(IBX_DIR_TRASH);
     IBX_printf("--empty-trash complete.\n");
-    system("tree .ironbinx");
+    int sherr = system("tree .ironbinx");
+    if (sherr) {
+      return IBX_FAILURE;
+    }
 
   } break; // end of empty trash cmd
   case IBX_CMD_SEE_TRASH_1:
@@ -635,7 +669,10 @@ int IBX_CmdHandler(IBX_Uint32 sig, int argc, char **argv) {
       return IBX_FAILURE;
     }
 
-    system("clear && tree .ironbinx/trash");
+    int sherr = system("clear && tree .ironbinx/trash");
+    if (sherr) {
+      return IBX_FAILURE;
+    }
 
   } break; // end of see trash cmd
   case IBX_CMD_SEE_BIN_1:
@@ -650,7 +687,10 @@ int IBX_CmdHandler(IBX_Uint32 sig, int argc, char **argv) {
       return IBX_FAILURE;
     }
 
-    system("clear && tree bin");
+    int sherr = system("clear && tree bin");
+    if (sherr) {
+      return IBX_FAILURE;
+    }
 
   } break; // end of see bin cmd
   // -bo -bolo -lo might need some work because sometimes not building correctly
@@ -687,7 +727,11 @@ int IBX_CmdHandler(IBX_Uint32 sig, int argc, char **argv) {
     }
 
     char *tmp_show_build_ibx = IBX_StrMerge("cat ", IBX_CONFIG_BUILD_FILE);
-    system(tmp_show_build_ibx);
+    int sherr = system(tmp_show_build_ibx);
+    if (sherr) {
+      free(tmp_show_build_ibx);
+      return IBX_FAILURE;
+    }
 
     if (!IBX_IsFile(IBX_CONFIG_COMPILE_CMD_FILE)) {
       IBX_printf("build.ibx file not found. Aborting\n");

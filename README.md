@@ -26,7 +26,7 @@ Feedback, suggestions, and contributions are welcome as I continue to improve my
    -sb    --show-bin: Show the contents of bin dir.  
    -sbf   --show-build-file: Show the contents of config/build.ibx.  
 
-   You can run --install in an existing C project to install  IronbinX dependencies.  
+   You can run --install ibx in an existing C project.
           This command will create necessary files and directories for ibx to run.  
           A build config file will be created in  config/build.ibx  with key: value pairs.  
           You can modify values the build.ibx file that will be used with --build and other cmds.  
